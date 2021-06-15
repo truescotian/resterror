@@ -58,6 +58,8 @@ TBD
 
 5) Use an audit logger.
 
+6) When a model has an error and includes Op, the HTTP request should not show this. There needs to be a way to ensure clients do not see these internal errors.
+
 ## Resources
 https://medium.com/@ozdemir.zynl/rest-api-error-handling-in-go-behavioral-type-assertion-509d93636afd
 

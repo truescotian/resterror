@@ -1,7 +1,7 @@
 // This is an example scenario from the perspective of each consumer role. In these examples,
 // we use a UserService interface defined in the application domain.
 
-package main
+package error
 
 // UserService represents a service for managing users.
 type UserService interface {

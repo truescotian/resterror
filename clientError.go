@@ -1,4 +1,4 @@
-package main
+package error
 
 // ClientError is one of the two main error types (Client Error for 4xx and
 // Server Error for 5xx). Here we can declare interfaces based on the behaviour

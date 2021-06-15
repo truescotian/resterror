@@ -1,11 +1,26 @@
-package main
+package error
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+)
 
 // Wrapper for handler functions.
 type rootHandler func(http.ResponseWriter, *http.Request) error
 
 func testHandler(w http.ResponseWriter, r *http.Request) error {
+	const op = "testHandler"
+
 	if r.Method != http.MethodPost {
-		return NewRESTError(nil, 405, "Method not allowed.")
+		return Error{
+			Kind:    MethodNotAllowed,
+			Message: "Method not allowed",
+			Status:  405,
+			Op:      op,
+		}
 	}
 
 	body, err := ioutil.ReadAll(r.Body) // read request body.
@@ -15,7 +30,13 @@ func testHandler(w http.ResponseWriter, r *http.Request) error {
 
 	// Parse body as json.
 	if err := json.Unmarshal(body, &schema); err != nil {
-		return NewHttpError(err, 400, "Bad request : invalid JSON.")
+		return Error{
+			Kind:    EPARSE,
+			Status:  400,
+			Message: "Unable to marshal resource",
+			Op:      op,
+			Err:     err,
+		}
 	}
 
 	ok, err := loginUser("username", "password")
@@ -24,7 +45,11 @@ func testHandler(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	if !ok { // Authentication failed.
-		return NewHTTPError(nil, 401, "Wrong password or username.")
+		return Error{
+			Kind:    EINVALID,
+			Status:  422,
+			Message: "Wrong password or username",
+		}
 	}
 
 	w.WriteHeader(200) // Successfully authenticated.
