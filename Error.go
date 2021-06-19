@@ -52,6 +52,7 @@ func (e *Error) ResponseBody() ([]byte, error) {
 func (e *Error) ResponseHeaders() (string, map[string]string) {
 	return e.Kind, map[string]string{
 		"Content-Type": "application/json; charset=utf-8",
+		"X-Content-Type-Options", "nosniff",
 	}
 }
 
