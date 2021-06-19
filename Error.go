@@ -10,6 +10,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
 )
 
 // Error is the center of this package and is a concrete representation of our errors.
@@ -51,8 +52,8 @@ func (e *Error) ResponseBody() ([]byte, error) {
 
 func (e *Error) ResponseHeaders() (string, map[string]string) {
 	return e.Kind, map[string]string{
-		"Content-Type": "application/json; charset=utf-8",
-		"X-Content-Type-Options", "nosniff",
+		"Content-Type":           "application/json; charset=utf-8",
+		"X-Content-Type-Options": "nosniff",
 	}
 }
 
@@ -88,6 +89,19 @@ func (e *Error) Error() string {
 		buf.WriteString(e.Message)
 	}
 	return buf.String()
+}
+
+func (e *Error) HttpError(w http.ResponseWriter) {
+	out, err := e.ResponseBody()
+	if err != nil {
+		// TODO
+	}
+	_, headers := e.ResponseHeaders()
+	for k, _ := range headers {
+		w.Header().Set(k, headers[k])
+	}
+	w.WriteHeader(e.Status)
+	w.Write(out)
 }
 
 // NewError returns an Error using the passed arguments.

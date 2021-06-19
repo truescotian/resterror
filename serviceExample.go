@@ -3,6 +3,7 @@
 
 package error
 
+/*
 // UserService represents a service for managing users.
 type UserService interface {
 	// Returns a user by ID.
@@ -11,6 +12,7 @@ type UserService interface {
 	// Creates a new user.
 	CreateUser(user *User) error
 }
+*/
 
 /*
   APPLICATION ROLE EXAMPLE

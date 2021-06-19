@@ -1,21 +1,18 @@
 package error
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"log"
 	"net/http"
 )
 
 // Wrapper for handler functions.
 type rootHandler func(http.ResponseWriter, *http.Request) error
 
+/*
 func testHandler(w http.ResponseWriter, r *http.Request) error {
 	const op = "testHandler"
 
 	if r.Method != http.MethodPost {
-		return Error{
+		return &Error{
 			Kind:    MethodNotAllowed,
 			Message: "Method not allowed",
 			Status:  405,
@@ -30,7 +27,7 @@ func testHandler(w http.ResponseWriter, r *http.Request) error {
 
 	// Parse body as json.
 	if err := json.Unmarshal(body, &schema); err != nil {
-		return Error{
+		return &Error{
 			Kind:    EPARSE,
 			Status:  400,
 			Message: "Unable to marshal resource",
@@ -45,7 +42,7 @@ func testHandler(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	if !ok { // Authentication failed.
-		return Error{
+		return &Error{
 			Kind:    EINVALID,
 			Status:  422,
 			Message: "Wrong password or username",
@@ -94,3 +91,4 @@ func main() {
 	http.Handle("/", rootHandler(testHandler))
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
+*/
