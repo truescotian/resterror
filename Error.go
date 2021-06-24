@@ -10,7 +10,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/http"
 )
 
 // Error is the center of this package and is a concrete representation of our errors.
@@ -91,19 +90,6 @@ func (e *Error) Error() string {
 	return buf.String()
 }
 
-func (e *Error) HttpError(w http.ResponseWriter) {
-	out, err := e.ResponseBody()
-	if err != nil {
-		// TODO
-	}
-	_, headers := e.ResponseHeaders()
-	for k, _ := range headers {
-		w.Header().Set(k, headers[k])
-	}
-	w.WriteHeader(e.Status)
-	w.Write(out)
-}
-
 // NewError returns an Error using the passed arguments.
 func NewError(op string, status int, message string, kind string, err error) *Error {
 	return &Error{
@@ -115,10 +101,13 @@ func NewError(op string, status int, message string, kind string, err error) *Er
 	}
 }
 
-// ErrorKind returns the kind of the root error if available. Otherwise returns EINTERNAL.
+// ErrorKind returns the kind of the root error if available.
+// Otherwise returns EINTERNAL.
 //
-// This function allows for working with Error effectively, avoiding issues such as type asserting
-// whenever we want to access Error.Kind. This and other issues are solved by the following:
+// This function allows for working with Error effectively,
+// avoiding issues such as type asserting
+// whenever we want to access Error.Kind. This and other
+// issues are solved by the following:
 //
 // 1. Return no error kind for nil errors.
 // 2. Search the chain of Error.Err until a defined Kind is found.
